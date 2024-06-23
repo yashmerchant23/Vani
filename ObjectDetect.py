@@ -7,6 +7,10 @@ folder = "frames"
 # initializing the webcam
 cap = cv2.VideoCapture(0)
 
+# Create a resizable window
+cv2.namedWindow("Camera", cv2.WINDOW_NORMAL)
+
+
 if not cap.isOpened():
     print("Webcam not started......")
     exit()
