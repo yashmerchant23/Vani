@@ -21,6 +21,7 @@ if not cap.isOpened():
     print("Webcam not started......")
     exit()
 
+
 # Capture frames
 while True:
     # Read a frame
@@ -45,4 +46,3 @@ while True:
 # Release the camera
 cap.release()
 cv2.destroyAllWindows()
-
