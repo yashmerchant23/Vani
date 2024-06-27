@@ -14,7 +14,8 @@ path = f"{folder}/frame.jpg"
 cap = cv2.VideoCapture(0)
 
 # Create a resizable window
-cv2.namedWindow("Camera", cv2.WINDOW_NORMAL)
+cv2.namedWindow("Live Feed", cv2.WINDOW_NORMAL)
+cv2.namedWindow("Delayed Feed", cv2.WINDOW_NORMAL)
 
 # Check if the webcam is opened correctly
 if not cap.isOpened():
@@ -29,18 +30,19 @@ while True:
         print("Cannot read frame")
         break
 
-    # Display the frame
-    cv2.imshow("Camera", frame)
+    # Display frame in "Live Feed" window (no delay)
+    cv2.imshow("Live Feed", frame)
 
     # Exit on 'q' key press
     if cv2.waitKey(1) == ord('q'):
         break
 
-    print("Smile!😁📸")
-    cv2.imwrite(path, frame)  # saving the latest image in the folder by replacing the existing one
-
-    # the 2 second diff
-    time.sleep(2)
+    # Display frame in "Delayed Feed" window with a 2-second delay
+    if time.time() % 2 < 1:           # we dont stop the time we only save/show the frame when time is multiple of 2
+        cv2.imshow("Delayed Feed", frame)
+        # Save the frame
+        cv2.imwrite(path, frame)  # saving the latest frame in the folder by replacing the previous one(as they both are named the same)
+        print("You are being watched 👀")
 
 # Release the camera
 cap.release()
