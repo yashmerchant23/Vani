@@ -4,7 +4,6 @@ import os
 
 folder = "frames"
 
-
 current_directory = os.getcwd()
 frames_dir = os.path.join(current_directory, folder)       # creates a path for the new folder in the directory
 os.makedirs(frames_dir, exist_ok=True)  #create a folder in the same directory if it already does not exists
