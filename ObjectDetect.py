@@ -1,50 +1,44 @@
-import cv2
-import time
-import os
+from PIL import Image
+import requests
+from io import BytesIO
+from transformers import pipeline
 
-folder = "frames"
+# initialize the image-to-text model
+prompt = """You are Sir David Attenborough. Describe this photo as if it were part of a nature documentary. Be witty, humorous, and concise. Avoid repetition. If there's something unusual happening, emphasize it."""
+model = pipeline("text-generation", model="llava-hf/llava-v1.6-mistral-7b-hf", tokenizer="llava-hf/llava-v1.6-mistral-7b-hf", configuration={"max_length": 50, "num_beams": 4, "early_stopping": True, "num_return_sequences": 1})
 
+def image_to_text(image_path):
+    # load the image
+    image = Image.open(image_path).resize((224, 224))
+    
+    # convert the image to bytes
+    byte_io = BytesIO()
+    image.save(byte_io, format='JPEG')
+    img_bytes = byte_io.getvalue()
 
-current_directory = os.getcwd()
-frames_dir = os.path.join(current_directory, folder)       # creates a path for the new folder in the directory
-os.makedirs(frames_dir, exist_ok=True)  #create a folder in the same directory if it already does not exists
-path = f"{folder}/frame.jpg"
+    # send a request to the Hugging Face endpoint to generate text from the image
+    response = requests.post(
+        "https://api-inference.huggingface.co/models/llava-hf/llava-v1.6-mistral-7b-hf",
+        headers={
+            "Authorization": "Bearer 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",
+            "Content-Type": "application/json",
+        },
+        json={
+            "inputs": {"image": img_bytes},
+            "parameters": {
+                "return_tensors": False,
+                "use_fast": True,
+                "seed": 42,
+            }
+        },
+    )
+    result = response.json()[0]['generated_text'][len(prompt):]
 
-# initializing the webcam
-cap = cv2.VideoCapture(0)
+    # return the generated text
+    return result
 
-# Create a resizable window
-cv2.namedWindow("Live Feed", cv2.WINDOW_NORMAL)
-cv2.namedWindow("Delayed Feed", cv2.WINDOW_NORMAL)
-
-# Check if the webcam is opened correctly
-if not cap.isOpened():
-    print("Webcam not started......")
-    exit()
-
-# Capture frames
+# continuously convert the latest frame.jpg image to text
 while True:
-    # Read a frame
-    ret, frame = cap.read()
-    if not ret:
-        print("Cannot read frame")
-        break
-
-    # Display frame in "Live Feed" window (no delay)
-    cv2.imshow("Live Feed", frame)
-
-    # Exit on 'q' key press
-    if cv2.waitKey(1) == ord('q'):
-        break
-
-    # Display frame in "Delayed Feed" window with a 2-second delay
-    if time.time() % 2 < 1:           # we dont stop the time we only save/show the frame when time is multiple of 2
-        cv2.imshow("Delayed Feed", frame)
-        # Save the frame
-        cv2.imwrite(path, frame)  # saving the latest frame in the folder by replacing the previous one(as they both are named the same)
-        print("You are being watched 👀")
-
-# Release the camera
-cap.release()
-cv2.destroyAllWindows()
-
+    image_path = "frames/frame.jpg"
+    text = image_to_text(image_path)
+    print(text)

@@ -1,0 +1,6 @@
+prompt = """\
+    Describe the image suitable for any voice.\
+    Your descriptions should be concise yet vivid, highlighting any notable features or behaviors.\
+    Try to keep it lighthearted and entertaining, but avoid repeating yourself.\
+    Remember to point out anything particularly interesting!\
+    """
