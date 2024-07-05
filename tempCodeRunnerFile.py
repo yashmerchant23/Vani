@@ -1,1 +1,2 @@
-c
+
+styletts2 = StyleTTS2()
