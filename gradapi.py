@@ -1,34 +1,41 @@
+import simpleaudio as sa
+from gradio_client import Client
+
+# Define the client
+client = Client("https://coqui-xtts.hf.space/--replicas/ldw7u/")
+
+# Define the input parameters
+text_prompt = "Create an emotional orchestral piece with a slow, haunting melody that conveys deep sorrow and farewell."
+language = "en,en"
+reference_audio_url = "https://github.com/gradio-app/gradio/raw/main/test/test_files/audio_sample.wav"
+
+# Query the API
+result = client.predict(
+    text_prompt,
+    language,
+    reference_audio_url,
+    reference_audio_url,  # Using the same URL for reference audio and microphone
+    fn_index=1
+)
+
+# Extract the URL of the synthesized audio
+synthesized_audio_url = result[1]
+
+# Play the generated audio
 import requests
+from tempfile import NamedTemporaryFile
 
-# Define the Gradio Space URL and the API endpoint
-gradio_space_url = "https://huggingface.co/spaces/styletts2/styletts2"
-api_endpoint = f"{gradio_space_url}/api/predict/"
-
-# Define the input text and reference voice file path
-text = "Dhoni finishes off in style. A magnificent strike into the crowd! India lift the World Cup after 28 years"
-reference_voice_path = "Voices/AMitabh_Bachchanshort.wav"
-
-# Prepare the payload
-with open(reference_voice_path, "rb") as f:
-    reference_voice_data = f.read()
-
-payload = {
-    "data": [text, reference_voice_data]
-}
-
-# Send a POST request to the API
-response = requests.post(api_endpoint, files=payload)
-
-# Check the response status
-if response.status_code == 200:
-    result = response.json()
-    audio_url = result['data'][0]  # Assuming the response contains a URL to the generated audio
+def play_audio_from_url(url):
+    # Download the audio file
+    response = requests.get(url)
+    temp_audio = NamedTemporaryFile(delete=False, suffix=".wav")
+    temp_audio.write(response.content)
+    temp_audio.close()
     
-    # Download the generated audio file
-    audio_response = requests.get(audio_url)
-    with open("output_audio.wav", "wb") as f:
-        f.write(audio_response.content)
-    
-    print(f"Audio file saved as 'output_audio.wav'")
-else:
-    print(f"Request failed with status code: {response.status_code}")
+    # Play the audio file
+    wave_obj = sa.WaveObject.from_wave_file(temp_audio.name)
+    play_obj = wave_obj.play()
+    play_obj.wait_done()
+
+# Play the synthesized audio
+play_audio_from_url(synthesized_audio_url)
