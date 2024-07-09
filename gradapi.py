@@ -67,18 +67,13 @@
 
 from gradio_client import Client
 
-client = Client("https://kaiosan-voice-cloning22.hf.space/--replicas/mm6jg/")
+client = Client("abidlabs/en2fr")
+job = client.submit("Hello.", api_name="/predict")  # This is not blocking
 
-try:
-    result = client.predict(
-        "Test text",  # Simplified text input
-        "https://github.com/gradio-app/gradio/raw/main/test/test_files/audio_sample.wav",  # Known good URL
-        "en",  # Use English to simplify
-        api_name="/predict"
-    )
-    print(result)
-except Exception as e:
-    print(f"An error occurred: {e}")
+# Do something else
+
+print(job.result())  # This is blocking
+
 
 
 
