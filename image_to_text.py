@@ -10,7 +10,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=UserWarning)
 
 # Define the Hugging Face model path
-hf_path = 'jiajunlong/TinyLLaVA-OpenELM-450M-SigLIP-0.89B'
+hf_path = 'jiajunlong/TinyLLaVA-OpenELM-450M-CLIP-0.55B'
 
 # Load the model
 model = AutoModelForCausalLM.from_pretrained(hf_path, trust_remote_code=True)
@@ -34,10 +34,6 @@ def generate_text_for_latest_image():
             if os.path.exists(image_path):
                 # Load the image
                 frame = cv2.imread(image_path)
-                
-                # Display the image (optional)
-                cv2.imshow("Current Image", frame)
-                cv2.waitKey(1)  # Wait for a moment to display the image (optional)
 
                 # Generate text based on the image
                 output_text, generation_time = model.chat(prompt=truncated_prompt, image=image_path, tokenizer=tokenizer)
