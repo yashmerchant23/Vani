@@ -6,5 +6,3 @@ prompt = """\
     """
 
     Describe the image. descriptions should be concise yet vivid, highlighting any notable features or behaviors. Try to keep it lighthearted and entertaining, but avoid repeating yourself. Remember to point out anything particularly interesting!
-
-https://discuss.huggingface.co/t/how-to-use-gradio-api/47108

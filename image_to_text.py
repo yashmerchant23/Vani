@@ -1,7 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 # Define the Hugging Face model path
-hf_path = 'jiajunlong/TinyLLaVA-OpenELM-450M-SigLIP-0.89B'
+hf_path = 'jiajunlong/TinyLLaVA-OpenELM-450M-CLIP-0.55B'
 
 # Load the model
 model = AutoModelForCausalLM.from_pretrained(hf_path, trust_remote_code=True)
@@ -18,8 +18,10 @@ image_url = "soccer_practice.jpg"
 # Generate text based on prompt and image
 output_text, generation_time = model.chat(prompt=prompt, image=image_url, tokenizer=tokenizer)
 
-# Print outputs
-print('Model output:', output_text)
+# Remove any unwanted newlines or extra spaces
+cleaned_output_text = output_text.replace('\n', ' ').strip()
+
+print('Cleaned model output:', cleaned_output_text)
 print('Running time:', generation_time)
 
 
