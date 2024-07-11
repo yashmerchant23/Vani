@@ -10,7 +10,7 @@ os.makedirs(frames_dir, exist_ok=True)  #create a folder in the same directory i
 path = f"{folder}/frame.jpg"
 
 # initializing the webcam
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)           
 
 # Create a resizable window
 cv2.namedWindow("Live Feed", cv2.WINDOW_NORMAL)
@@ -37,7 +37,7 @@ while True:
         break
 
     # Display frame in "Delayed Feed" window with a 2-second delay
-    if time.time() % 2 < 1:           # we dont stop the time we only save/show the frame when time is multiple of 2
+    if time.time() % 10 < 1:           # we dont stop the time we only save/show the frame when time is multiple of 2
         cv2.imshow("Delayed Feed", frame)
         # Save the frame
         cv2.imwrite(path, frame)  # saving the latest frame in the folder by replacing the previous one(as they both are named the same)

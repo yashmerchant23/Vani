@@ -1,2 +1,1 @@
-
-styletts2 = StyleTTS2()
+http://192.168.0.195:8080

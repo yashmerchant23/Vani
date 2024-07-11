@@ -14,16 +14,13 @@ tokenizer = AutoTokenizer.from_pretrained(hf_path, use_fast=False, model_max_len
 prompt = "Describe the image. descriptions should be concise yet vivid, highlighting any notable features or behaviors. Try to keep it lighthearted and entertaining, but avoid repeating yourself. Remember to point out anything particularly interesting!"
 image_url = "soccer_practice.jpg"
 
+
 # Generate text based on prompt and image
 output_text, generation_time = model.chat(prompt=prompt, image=image_url, tokenizer=tokenizer)
 
 # Print outputs
 print('Model output:', output_text)
 print('Running time:', generation_time)
-
-
-
-
 
 
 
