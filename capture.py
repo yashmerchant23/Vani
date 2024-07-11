@@ -11,7 +11,7 @@ os.makedirs(frames_dir, exist_ok=True)  # create a folder in the same directory 
 path = f"{folder}/frame.jpg"
 
 # initializing the webcam
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture('http://192.168.0.100:8080/video')
 
 # Create a resizable window
 cv2.namedWindow("Live Feed", cv2.WINDOW_NORMAL)
@@ -25,7 +25,6 @@ if not cap.isOpened():
 # Track the timestamp of the last saved image
 last_saved_time = time.time()  # to save first image after exactly 10 sec
 
-
 # Capture frames
 while True:
     # Read a frame
@@ -38,7 +37,7 @@ while True:
     cv2.imshow("Live Feed", frame)
 
     # Check if it's time to save a new image (every 10 seconds)
-    if time.time() - last_saved_time >= 10:
+    if time.time() - last_saved_time >= 20:
         # Save the frame
         cv2.imwrite(path, frame)
         last_saved_time = time.time()  # Update last saved time
