@@ -1,3 +1,4 @@
+
 import cv2
 import time
 import os
@@ -21,9 +22,9 @@ if not cap.isOpened():
     print("Webcam not started......")
     exit()
 
-# Initialize flag to track new image saved and message printed
-new_image_saved = False
-message_printed = False
+# Track the timestamp of the last saved image
+last_saved_time = time.time()  # to save first image after exactly 10 sec
+
 
 # Capture frames
 while True:
@@ -36,24 +37,17 @@ while True:
     # Display frame in "Live Feed" window (no delay)
     cv2.imshow("Live Feed", frame)
 
-    # Display frame in "Delayed Feed" window with a 2-second delay
-    if time.time() % 3 < 1:  # Display only during certain intervals
+    # Check if it's time to save a new image (every 10 seconds)
+    if time.time() - last_saved_time >= 10:
+        # Save the frame
+        cv2.imwrite(path, frame)
+        last_saved_time = time.time()  # Update last saved time
+
+        # Print the message only once after saving a new image
+        print("You are being watched 👀")
+
+        # Display frame in "Delayed Feed" window
         cv2.imshow("Delayed Feed", frame)
-        # Save the frame if it's time to do so
-        cv2.imwrite(path, frame)  # Saving the latest frame in the folder by replacing the previous one (since they are named the same)
-
-        # Check if a new image is saved
-        if not new_image_saved:
-            new_image_saved = True
-            message_printed = False  # Reset message_printed flag
-
-        # Print the message only once after a new image is saved
-        if new_image_saved and not message_printed:
-            print("You are being watched 👀")
-            message_printed = True  # Set flag to indicate message has been printed
-
-    else:
-        new_image_saved = False  # Reset new_image_saved flag if no image saved this time
 
     # Exit on 'q' key press
     if cv2.waitKey(1) == ord('q'):
@@ -62,5 +56,4 @@ while True:
 # Release the camera
 cap.release()
 cv2.destroyAllWindows()
-
 
