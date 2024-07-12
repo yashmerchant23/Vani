@@ -11,7 +11,7 @@ os.makedirs(frames_dir, exist_ok=True)  # create a folder in the same directory 
 path = f"{folder}/frame.jpg"
 
 # initializing the webcam
-cap = cv2.VideoCapture('http://192.168.0.100:8080/video')
+cap = cv2.VideoCapture(0)
 
 # Create a resizable window
 cv2.namedWindow("Live Feed", cv2.WINDOW_NORMAL)

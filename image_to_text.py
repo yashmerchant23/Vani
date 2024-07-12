@@ -19,7 +19,7 @@ config = model.config
 tokenizer = AutoTokenizer.from_pretrained(hf_path, use_fast=False, model_max_length=config.max_length)
 
 # Define prompt and image path
-prompt = "Describe the image. Descriptions should be concise yet vivid, highlighting any notable features or behaviors. Try to keep it lighthearted and entertaining, but avoid repeating yourself. Remember to point out anything particularly interesting!"
+prompt = "Describe the image in very funny way. Be very accurate. do not repeat anything you said previously. "
 image_path = "frames/frame.jpg"
 
 # Truncate the prompt if it exceeds the maximum length
