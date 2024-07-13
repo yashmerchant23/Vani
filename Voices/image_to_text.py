@@ -1,4 +1,3 @@
-
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
 import os
@@ -16,14 +15,15 @@ model = AutoModelForCausalLM.from_pretrained(hf_path, trust_remote_code=True)
 config = model.config
 
 # Load the tokenizer
-tokenizer = AutoTokenizer.from_pretrained(hf_path, use_fast=False, model_max_length=config.max_length)
+tokenizer = AutoTokenizer.from_pretrained(hf_path, use_fast=False)
 
 # Define prompt and image path
-prompt = "Describe the image in very funny way. Be very accurate. do not repeat anything you said previously. "
-image_path = "../frames/frame.jpg"
+prompt = "Imagine you are narrating a Discovery Channel documentary about this image. Describe it with scientific accuracy, but don’t hesitate to inject some humor. Be witty and sarcastic while ensuring your facts are spot-on. Avoid repeating any statements, and keep the audience engaged with your clever observations."
+image_path = "disco.jfif"
 
-# Truncate the prompt if it exceeds the maximum length
-truncated_prompt = prompt[:config.max_length]
+# Increase the prompt size buffer (for example, set to 512 characters)
+max_prompt_length = 1000
+truncated_prompt = prompt[:max_prompt_length]
 
 # Function to read the latest image and generate text
 def generate_text_for_latest_image():
