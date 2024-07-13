@@ -1,9 +1,11 @@
-
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
 import os
 import cv2
 import warnings
+import sounddevice as sd
+import soundfile as sf
+from TTS.api import TTS
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=UserWarning)
@@ -16,14 +18,18 @@ model = AutoModelForCausalLM.from_pretrained(hf_path, trust_remote_code=True)
 config = model.config
 
 # Load the tokenizer
-tokenizer = AutoTokenizer.from_pretrained(hf_path, use_fast=False, model_max_length=config.max_length)
+tokenizer = AutoTokenizer.from_pretrained(hf_path, use_fast=False)
 
 # Define prompt and image path
-prompt = "Describe the image in very funny way. Be very accurate. do not repeat anything you said previously. "
-image_path = "frames/frame.jpg"
+prompt = ("Imagine you are narrating a Discovery Channel documentary about this image. Describe it with scientific accuracy, but don’t hesitate to inject some humor. Be witty and sarcastic while ensuring your facts are spot-on. Avoid repeating any statements, and keep the audience engaged with your clever observations.")
+image_path = "disco.jfif"
 
-# Truncate the prompt if it exceeds the maximum length
-truncated_prompt = prompt[:config.max_length]
+# Increase the prompt size buffer
+max_prompt_length = 1000
+truncated_prompt = prompt[:max_prompt_length]
+
+# Initialize TTS
+tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
 
 # Function to read the latest image and generate text
 def generate_text_for_latest_image():
@@ -37,10 +43,25 @@ def generate_text_for_latest_image():
                 # Generate text based on the image
                 output_text, generation_time = model.chat(prompt=truncated_prompt, image=image_path, tokenizer=tokenizer)
 
-                # Clean and print the output
+                # Clean the output
                 cleaned_output_text = output_text.replace('\n', ' ').strip()
-                print('Cleaned model output:', cleaned_output_text)
-                print('Running time:', generation_time)
+
+                # Print the generated text
+                print(cleaned_output_text)
+
+                # Use the generated text for voice cloning
+                tts.tts_to_file(
+                    text=cleaned_output_text,
+                    file_path="output.wav",
+                    speaker_wav=["optimus prime 2.mp3"],
+                    language="en",
+                    split_sentences=True
+                )
+
+                # Play the generated audio
+                data, fs = sf.read("output.wav", dtype='float32')
+                sd.play(data, fs)
+                sd.wait()
 
                 # Sleep for a moment before generating text again
                 time.sleep(1)
