@@ -11,7 +11,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=UserWarning)
 
 # Define the Hugging Face model path
-hf_path = 'jiajunlong/TinyLLaVA-OpenELM-450M-CLIP-0.55B'
+hf_path = 'jiajunlong/TinyLLaVA-OpenELM-450M-SigLIP-0.89B'
 
 # Load the model
 model = AutoModelForCausalLM.from_pretrained(hf_path, trust_remote_code=True)
@@ -22,7 +22,7 @@ tokenizer = AutoTokenizer.from_pretrained(hf_path, use_fast=False)
 
 # Define prompt and image path
 prompt = ("Imagine you are narrating a Discovery Channel documentary about this image. Describe it with scientific accuracy, but don’t hesitate to inject some humor. Be witty and sarcastic while ensuring your facts are spot-on. Avoid repeating any statements, and keep the audience engaged with your clever observations.")
-image_path = "disco.jfif"
+image_path = "../frames/frame.jpg"
 
 # Increase the prompt size buffer
 max_prompt_length = 1000
