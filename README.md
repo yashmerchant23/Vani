@@ -2,8 +2,8 @@
 Voice your Actions
 
 ## Working 
-Run 2 files capture.py and imgtospeech.py simultaneously
-the first script saves a frame every 20 seconds 
+Run 2 files capture.py and imgtospeech.py simultaneously <br>
+the first script saves a frame every 20 seconds <br>
 the second script generates text describing that image using TinyLLava model and then generates/plays the audio using Coqui TTS model 
 
 ## Hardware Requirments
@@ -54,4 +54,5 @@ run the scripts
 ## Acknowledgements
 
  - [Awesome Readme Templates](https://www.youtube.com/watch?v=wOEz5xRLaRA)
+
 
