@@ -51,8 +51,7 @@ run the scripts
   python imgtospeech.py
 ```
 
-
-
 ## Acknowledgements
 
  - [Awesome Readme Templates](https://www.youtube.com/watch?v=wOEz5xRLaRA)
+
